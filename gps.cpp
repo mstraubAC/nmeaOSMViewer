@@ -7,7 +7,7 @@
 
 #include "gps.h"
 
-GPS::GPS() : fGPSState(GPS::noFix), fSatCount(0), fTime(0), fLatitude(0), fLongitude(0), fAltitude(0), fHorizontalPrecision(10000)
+GPS::GPS() : fGPSState(GPS::noFix), fSatCount(0), fTime(), fLatitude(0), fLongitude(0), fAltitude(0), fHorizontalPrecision(10000)
 {
 }
 
