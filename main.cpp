@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 		url = QUrl(argv[1]);
 	}
 	else {
-		url = QUrl("http://www.google.com/ncr");
+		url = QUrl("https://www.straub-nv.de/osmMap/");
 	}
 
 	BrowserWindow browser(url);

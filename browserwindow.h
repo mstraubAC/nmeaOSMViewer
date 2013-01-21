@@ -12,19 +12,19 @@ class BrowserWindow : public QMainWindow {
 	private:
 		QString fQuery;
 		QWebView* fView;
-		QLineEdit* fLocationEdit;
-		QAction* fRotateAction;
+//		QLineEdit* fLocationEdit;
+//		QAction* fRotateAction;
 		int fProgress;
 
 	protected slots:
-		void adjustLocation();
-		void changeLocation();
+//		void adjustLocation();
+//		void changeLocation();
 		void adjustTitle();
 		void setProgress(int p);
 		void finishLoading(bool);
 		
-		void viewSource();
-		void slotSourceDownloaded();
+//		void viewSource();
+//		void slotSourceDownloaded();
 
 //		void hightlightAllLinks();
 //		void rotateImages(bool invert);

@@ -14,21 +14,21 @@ BrowserWindow::BrowserWindow(const QUrl& url) {
 	connect(fView, SIGNAL(loadProgress(int)), SLOT(setProgress(int)));
 	connect(fView, SIGNAL(loadFinished(bool)), SLOT(finishedLoading(bool)));
 
-	fLocationEdit = new QLineEdit(this);
-	fLocationEdit->setSizePolicy(QSizePolicy::Expanding, fLocationEdit->sizePolicy().verticalPolicy());
-	connect(fLocationEdit, SIGNAL(returnPressed()), SLOT(changeLocation()));
+//	fLocationEdit = new QLineEdit(this);
+//	fLocationEdit->setSizePolicy(QSizePolicy::Expanding, fLocationEdit->sizePolicy().verticalPolicy());
+//	connect(fLocationEdit, SIGNAL(returnPressed()), SLOT(changeLocation()));
 
-	QToolBar* toolBar = addToolBar(tr("Navigation"));
-	toolBar->addAction(fView->pageAction(QWebPage::Back));
-	toolBar->addAction(fView->pageAction(QWebPage::Forward));
-	toolBar->addAction(fView->pageAction(QWebPage::Reload));
-	toolBar->addAction(fView->pageAction(QWebPage::Stop));
-	toolBar->addWidget(fLocationEdit);
+//	QToolBar* toolBar = addToolBar(tr("Navigation"));
+//	toolBar->addAction(fView->pageAction(QWebPage::Back));
+//	toolBar->addAction(fView->pageAction(QWebPage::Forward));
+//	toolBar->addAction(fView->pageAction(QWebPage::Reload));
+//	toolBar->addAction(fView->pageAction(QWebPage::Stop));
+//	toolBar->addWidget(fLocationEdit);
 
-	QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
-	QAction* viewSourceAction = new QAction("Page Source", this);
-	connect(viewSourceAction, SIGNAL(triggered()), SLOT(viewSource()));
-	viewMenu->addAction(viewSourceAction);
+//	QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
+//	QAction* viewSourceAction = new QAction("Page Source", this);
+//	connect(viewSourceAction, SIGNAL(triggered()), SLOT(viewSource()));
+//	viewMenu->addAction(viewSourceAction);
 
 	//.... missing fancy stuff from example
 	
@@ -36,31 +36,31 @@ BrowserWindow::BrowserWindow(const QUrl& url) {
 	setUnifiedTitleAndToolBarOnMac(true);
 }
 
-void BrowserWindow::viewSource() {
-	QNetworkAccessManager* accessManager = fView->page()->networkAccessManager();
-	QNetworkRequest request(fView->url());
-	QNetworkReply* reply = accessManager->get(request);
-	connect(reply, SIGNAL(finished()), this, SLOT(slotSourceDownloaded()));
-}
+//void BrowserWindow::viewSource() {
+//	QNetworkAccessManager* accessManager = fView->page()->networkAccessManager();
+//	QNetworkRequest request(fView->url());
+//	QNetworkReply* reply = accessManager->get(request);
+//	connect(reply, SIGNAL(finished()), this, SLOT(slotSourceDownloaded()));
+//}
+//
+//void BrowserWindow::slotSourceDownloaded() {
+//	QNetworkReply* reply = qobject_cast<QNetworkReply*>(const_cast<QObject*>(sender()));
+//	QTextEdit* textEdit = new QTextEdit(NULL);
+//	textEdit->setAttribute(Qt::WA_DeleteOnClose);
+//	textEdit->show();
+//	textEdit->setPlainText(reply->readAll());
+//	reply->deleteLater();
+//}
 
-void BrowserWindow::slotSourceDownloaded() {
-	QNetworkReply* reply = qobject_cast<QNetworkReply*>(const_cast<QObject*>(sender()));
-	QTextEdit* textEdit = new QTextEdit(NULL);
-	textEdit->setAttribute(Qt::WA_DeleteOnClose);
-	textEdit->show();
-	textEdit->setPlainText(reply->readAll());
-	reply->deleteLater();
-}
+//void BrowserWindow::adjustLocation() {
+//	fLocationEdit->setText(fView->url().toString());
+//}
 
-void BrowserWindow::adjustLocation() {
-	fLocationEdit->setText(fView->url().toString());
-}
-
-void BrowserWindow::changeLocation() {
-	QUrl url(fLocationEdit->text());
-	fView->load(url);
-	fView->setFocus();
-}
+//void BrowserWindow::changeLocation() {
+//	QUrl url(fLocationEdit->text());
+//	fView->load(url);
+//	fView->setFocus();
+//}
 
 void BrowserWindow::adjustTitle() {
 	if (fProgress <= 0 || fProgress >= 100) {
