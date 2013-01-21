@@ -5,8 +5,13 @@ FIND_PACKAGE(Qt4 REQUIRED)
 SET(QT_USE_QTWEBKIT TRUE)
 SET(QT_USE_QTNETWORK TRUE)
 
-SET(nmeaOSMviewer_SOURCES main.cpp browserwindow.cpp)
-SET(nmeaOSMviewer_HEADERS browserwindow.h)
+SET(nmeaOSMviewer_SOURCES main.cpp browserwindow.cpp gps.cpp gpsNMEA.cpp) 
+SET(nmeaOSMviewer_HEADERS browserwindow.h gps.h gpsNMEA.h)
+
+## -g Debugging
+## -Wall all warnings
+## -std=c++0x
+set(CMAKE_CXX_FLAGS "-g -Wall -std=c++0x")
 
 QT4_WRAP_CPP(nmeaOSMviewer_HEADERS_MOC ${nmeaOSMviewer_HEADERS})
 INCLUDE(${QT_USE_FILE})
