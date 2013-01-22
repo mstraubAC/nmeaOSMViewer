@@ -16,16 +16,19 @@
 #include <stdint.h>
 
 //
-class GPS {
+class GPS
+{
 	public:
-		enum GPSState { noFix, fix, dgpsFix };
+		enum GPSState
+		{
+			dataNotValid = 0, estimatedMode = 1, manualInputMode = 2, simulatedMode = 3, autonomousMode = 4, differentialGPS = 5
+		};
 
 		GPS();
 		GPS(const GPS& o);
 		virtual ~GPS();
 
 		GPS& operator=(const GPS& o);
-
 
 		double getAltitude() const;
 		void setAltitude(double altitude);
