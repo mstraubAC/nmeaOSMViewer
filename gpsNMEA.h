@@ -4,6 +4,8 @@
  * Parses NMEA messages according to
  * http://www.gpsinformation.org/dale/nmea.htm
  *
+ * All positioning datums are required to be WGS84
+ *
  *  Created on: Jan 21, 2013
  *      Author: marcel
  */
@@ -14,12 +16,13 @@
 #include "gps.h"
 #include <string>
 
-class gpsNMEA : public GPS {
+class GPSNMEA: public GPS
+{
 	public:
-		gpsNMEA();
-		gpsNMEA(const gpsNMEA& o);
-		virtual ~gpsNMEA();
-		gpsNMEA& operator=(const gpsNMEA& o);
+		GPSNMEA();
+		GPSNMEA(const GPSNMEA& o);
+		virtual ~GPSNMEA();
+		GPSNMEA& operator=(const GPSNMEA& o);
 
 		/**
 		 * If the provided string is a complete NMEA message,
@@ -41,6 +44,8 @@ class gpsNMEA : public GPS {
 		bool isNmeaMsg(const std::string& nmeaDgm) const;
 
 	private:
+		std::string calcChecksum(const std::string& nmeaDgm) const;
+
 		// parser for different NMEA sentences
 		void parseGGA(const std::string& nmeaDgm);
 		void parseGLL(const std::string& nmeaDgm);
