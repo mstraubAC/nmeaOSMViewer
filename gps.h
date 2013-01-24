@@ -14,6 +14,7 @@
 #include <cinttypes>
 #include <ctime>
 #include <stdint.h>
+#include <ostream>
 
 //
 class GPS
@@ -44,6 +45,10 @@ class GPS
 		void setSatCount(uint8_t satCount);
 		const tm& getTime() const;
 		void setTime(const tm& time);
+		double getCourse() const;
+		void setCourse(double course);
+		double getGroundSpeed() const;
+		void setGroundSpeed(double groundSpeed);
 
 	private:
 		GPSState fGPSState;
@@ -53,5 +58,10 @@ class GPS
 		double fLongitude; // >0 = E / <0 = W
 		double fAltitude; // in m
 		double fHorizontalPrecision; // in m
+		double fCourse;
+		double fGroundSpeed; // m/s
 };
+
+// ostream for easy outputin information for debugging
+std::ostream& operator<<(std::ostream& os, const GPS& in);
 #endif /* GPS_H_ */

@@ -6,6 +6,9 @@
  */
 
 #include "gps.h"
+#include <iostream>
+
+using namespace std;
 
 GPS::GPS() : fGPSState(GPS::dataNotValid), fSatCount(0), fTime(), fLatitude(0), fLongitude(0), fAltitude(0), fHorizontalPrecision(10000)
 {
@@ -102,4 +105,60 @@ const tm& GPS::getTime() const
 void GPS::setTime(const tm& time)
 {
 	fTime = time;
+}
+
+double GPS::getCourse() const
+{
+	return fCourse;
+}
+
+void GPS::setCourse(double course)
+{
+	fCourse = course;
+}
+
+double GPS::getGroundSpeed() const
+{
+	return fGroundSpeed;
+}
+
+void GPS::setGroundSpeed(double groundSpeed)
+{
+	fGroundSpeed = groundSpeed;
+}
+
+std::ostream& operator <<(std::ostream& os, const GPS& in)
+{
+	os << "Current GPS data: " << endl;
+//	cout << "  * Time: " << GPS::getTime() << endl;
+	os << "  * GPS State:    ";
+	switch (in.getGpsState()) {
+		case GPS::dataNotValid:
+			os << "dataNotValid";
+			break;
+		case GPS::estimatedMode:
+			os << "estimatedMode";
+			break;
+		case GPS::manualInputMode:
+			os << "manualInputMode";
+			break;
+		case GPS::simulatedMode:
+			os << "simulatedMode";
+			break;
+		case GPS::autonomousMode:
+			os << "autonomousMode";
+			break;
+		case GPS::differentialGPS:
+			os << "differentialGPS";
+			break;
+	}
+	os << endl;
+	os << "  * Sats in use:  " << in.getSatCount() << endl;
+	os << "  * Latitude:     " << in.getLatitude() << "deg" << endl;
+	os << "  * Longitude:    " << in.getLongitude() << "deg" << endl;
+	os << "  * Altitude:     " << in.getAltitude() << "m" << endl;
+	os << "  * Course:       " << in.getCourse() << "deg" << endl;
+	os << "  * Ground Speed: " << in.getGroundSpeed() << "m/s" << endl;
+
+	return os;
 }
