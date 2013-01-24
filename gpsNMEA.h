@@ -15,6 +15,7 @@
 
 #include "gps.h"
 #include <string>
+#include <vector>
 
 class GPSNMEA: public GPS
 {
@@ -45,12 +46,22 @@ class GPSNMEA: public GPS
 
 	private:
 		std::string calcChecksum(const std::string& nmeaDgm) const;
+		void updateTime(const std::string& s);
+		void updateDate(const std::string& s);
 
-		// parser for different NMEA sentences
-		void parseGGA(const std::string& nmeaDgm);
-		void parseGLL(const std::string& nmeaDgm);
+		/*
+		 * Parser for different NMEA sentences
+		 */
+		// Global Positioning System Fix Data
+		void parseGGA(const std::vector<std::string>& nmeaDgm);
+		// Geographic Position
+		void parseGLL(const std::vector<std::string>& nmeaDgm);
+		// GPS DOP and active satellites
 //		void parseGSA(const std::string& nmeaDgm);
-		void praseRMC(const std::string& nmeaDgm);
+		// GPS Satellites in view
+//		void parseGSV(const std::vector<std::string>& nmeaDgm);
+		// Recommended minimum specific GPS/Transit data
+		void praseRMC(const std::vector<std::string>& nmeaDgm);
 };
 
 #endif /* GPSNMEA_H_ */
