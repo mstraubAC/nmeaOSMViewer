@@ -1,0 +1,96 @@
+#header button{
+	margin-right:2em;
+}
+#header h3{
+	display: inline;
+}
+
+body {
+	margin-right: 0px;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+/* #map {
+	position: absolute;
+	top: 0px;
+	left: 200px;
+} */
+
+a.noBorder {
+	text-decoration: none;
+	border: 0;
+}
+
+img {
+	border: none;
+}
+
+#map {
+	position: absolute;
+	top:0px;
+	left:0px;
+	height:100%;
+	width:100%;
+	z-index:1;
+	background-color:#ddf;
+}
+
+#leftPanel {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 400px;
+	border: 2px solid black;
+	height: 100%;
+}
+
+#control {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 400px;
+	border: 1px solid black;
+}
+
+#debug {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 400px;
+	height: 0px;
+}
+
+#busInfo {
+	position: relative;
+	bottom: 0px;
+	left: 0px;
+	width: 400px;
+	border: 1px solid black;
+	background: #aaaaaa;
+}
+
+td.busAdded {
+	color: white;
+	background-color: green;
+	font-weight: bold;
+}
+
+td.busDefault {
+	color: white;
+	background-color: #FFAE2A;
+	font-weight: normal;
+}
+
+td.busNA {
+	color: white;
+	background-color: #FF0000;
+	font-weight: normal;
+}
+
+th.busses {
+	color: white;
+	background-color: gray;
+	font-weight: bold;
+}
