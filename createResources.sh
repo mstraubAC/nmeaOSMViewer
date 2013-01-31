@@ -6,7 +6,7 @@ echo "<!DOCTYPE RCC><RCC version=\"1.0\">" > resources.qrc
 echo "<qresource>" >> resources.qrc
 
 ## pack icons
-for i in $(find . -maxdepth 1 -type f -name \*.png); do
+for i in $(find icons/ -type f); do
 	echo "  <file>$i</file>" >> resources.qrc
 done
 
