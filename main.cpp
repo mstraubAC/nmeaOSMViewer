@@ -1,23 +1,21 @@
+#include <QObject>
 #include <QApplication>
 #include <QWidget>
 #include <QtGui>
+#include <QThread>
+#include <iostream>
+#include <string>
 
 #include "browserwindow.h"
+#include "Test.h"
+
+using namespace std;
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+	QApplication app(argc, argv);
 
-	QUrl url;
-	if (argc > 1) {
-		url = QUrl(argv[1]);
-	}
-	else {
-		url = QUrl("https://www.straub-nv.de/osmMap/");
-	}
-
-	BrowserWindow browser(url);
+	BrowserWindow browser;
 	browser.show();
-
-    return app.exec();
+	return app.exec();
 }

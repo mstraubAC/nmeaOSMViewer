@@ -13,7 +13,7 @@ class BrowserWindow: public QMainWindow
 	Q_OBJECT
 
 	public:
-		BrowserWindow(const QUrl& url);
+		BrowserWindow();
 		void restartUdpListener(unsigned short udpPort);
 
 	private:

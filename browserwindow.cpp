@@ -13,7 +13,7 @@
 using namespace std;
 using namespace boost::algorithm;
 
-BrowserWindow::BrowserWindow(const QUrl& url) : fUDPSocket(0)
+BrowserWindow::BrowserWindow() : fUDPSocket(0)
 {
 	// load resource file containing icons and html page
 	QResource::registerResource("resources.rcc");
