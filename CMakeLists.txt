@@ -6,8 +6,8 @@ FIND_PACKAGE(Qt4 REQUIRED)
 SET(QT_USE_QTWEBKIT TRUE)
 SET(QT_USE_QTNETWORK TRUE)
 
-SET(nmeaOSMviewer_SOURCES main.cpp browserwindow.cpp gps.cpp gpsNMEA.cpp Tools.cpp Settings.cpp Test.cpp OSMMap.cpp) 
-SET(nmeaOSMviewer_HEADERS browserwindow.h gps.h gpsNMEA.h Tools.h Settings.h Test.h OSMMap.h)
+SET(nmeaOSMviewer_SOURCES main.cpp browserwindow.cpp gps.cpp gpsNMEA.cpp Tools.cpp Settings.cpp OSMMap.cpp) 
+SET(nmeaOSMviewer_HEADERS browserwindow.h gps.h gpsNMEA.h Tools.h Settings.h OSMMap.h)
 
 ## -g Debugging
 ## -Wall all warnings

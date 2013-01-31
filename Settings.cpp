@@ -35,14 +35,14 @@ void Settings::InitWidget() {
 	QSpinBox* sbUdpPortnumber = new QSpinBox(this);
 
 	// define cancel and ok/apply button
-	QPixmap pmCancel("dialog-cancel.png");
+	QPixmap pmCancel(":/icons/dialog-cancel.png");
 	QIcon iCancel(pmCancel);
 	QPushButton* btnCancel = new QPushButton("Abbrechen", this);
 	btnCancel->setIcon(iCancel);
 	btnCancel->setIconSize(pmCancel.rect().size());
 	connect(btnCancel, SIGNAL(clicked()), this, SLOT(OnCancelPressed()));
 
-	QPixmap pmOk("dialog-ok-apply.png");
+	QPixmap pmOk(":/icons/dialog-ok-apply.png");
 	QIcon iOk(pmOk);
 	QPushButton* btnOk = new QPushButton("Ok", this);
 	btnOk->setIcon(iOk);
