@@ -39,10 +39,12 @@ class GPSNMEA: public GPS
 		 * Checks if the provided datagram is a valid NMEA
 		 * datagram.
 		 *
+		 * If false is returned and len > 0; a bad packet was found
+		 *
 		 * @param nmeaDgm
 		 * @return true if it is an NMEA message, otherwise false
 		 */
-		bool isNmeaMsg(const std::string& nmeaDgm) const;
+		bool isNmeaMsg(const std::string& nmeaDgm, unsigned int* start = 0, unsigned int* len = 0) const;
 
 	private:
 		std::string calcChecksum(const std::string& nmeaDgm) const;

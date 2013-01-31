@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 #include <boost/lexical_cast.hpp>
 
 using namespace std;
@@ -29,7 +30,7 @@ GPSNMEA::~GPSNMEA()
 	// TODO Auto-generated destructor stub
 }
 
-bool GPSNMEA::isNmeaMsg(const std::string& nmeaDgm) const
+bool GPSNMEA::isNmeaMsg(const std::string& nmeaDgm, unsigned int* startDgm, unsigned int* lenDgm) const
 {
 	/* typical NMEA dg: $GPGGA,123519,4807.038,N,01131.000,E,1,08,0.9,545.4,M,46.9,M,,*47
 	 *                  ^^^															  ^^^
@@ -39,20 +40,42 @@ bool GPSNMEA::isNmeaMsg(const std::string& nmeaDgm) const
 	 */
 
 	// 1. Search substring for identifier $GP
+//	cerr << "GPSNMEA::isNmeaMsg: checking dgm: " << nmeaDgm << endl;
 	size_t start = nmeaDgm.find("$GP");
-	if (start == string::npos) return false;
+	if (start == string::npos) {
+//		cerr << "GPSNMEA::isNmeaMsg: could not find $GP" << endl;
+		return false;
+	}
 
 	// 2. Search for *
 	size_t chksumStart = nmeaDgm.find("*", start);
-	if (chksumStart == string::npos) return false;
-	if (chksumStart + 2 >= nmeaDgm.size()) return false; // can checksum (2 places) be included in this dgm?
+	if (chksumStart == string::npos) {
+//		cerr << "GPSNMEA::isNmeaMsg: could not find *" << endl;
+		return false;
+	}
+	if (chksumStart + 2 >= nmeaDgm.size()) {
+//		cerr << "GPSNMEA::isNmeaMsg: dgm to short" << endl;
+		return false; // can checksum (2 places) be included in this dgm?
+	}
 
-	// 3. Check check sum
+	if (startDgm != 0 && lenDgm != 0) {
+		*startDgm = start;
+		*lenDgm = chksumStart + 3 - start;
+	}
+
+	// 3. Check check sum (over everything between $ and *)
 	string chkSumDgm = nmeaDgm.substr(chksumStart + 1, 2);
-	string msg = nmeaDgm.substr(start + 1, string::npos);
+	string msg = nmeaDgm.substr(start+1, chksumStart - start);
 	msg = msg.substr(0, msg.find("*"));
 
-	return (chkSumDgm.compare(calcChecksum(msg)) == 0);
+	bool checkSum = (chkSumDgm.compare(calcChecksum(msg)) == 0);
+	if (!checkSum) {
+		cerr << "GPSNMEA::isNmeaMsg: bad checksum: " << chkSumDgm << endl;
+		cerr << "   --> Checksum over: " << msg << endl;
+		cerr << "   --> Checksum is  : " << calcChecksum(msg) << endl;
+	}
+
+	return checkSum;
 }
 
 std::string GPSNMEA::calcChecksum(const std::string& nmeaDgm) const
@@ -67,6 +90,9 @@ std::string GPSNMEA::calcChecksum(const std::string& nmeaDgm) const
 	s << hex << int(chkSum);
 	string x(s.str());
 	transform(x.begin(), x.end(), x.begin(), ::toupper);
+	s.str("");
+	s << setw(2) << setfill('0') << x;
+	x = s.str();
 	return x;
 }
 
