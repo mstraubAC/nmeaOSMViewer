@@ -14,10 +14,12 @@
 #include <iostream>
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 using boost::lexical_cast;
 using boost::bad_lexical_cast;
+using namespace boost::algorithm;
 
 GPSNMEA::GPSNMEA()
 {
@@ -137,44 +139,58 @@ bool GPSNMEA::parseNmeaMsg(const std::string& nmeaDgm)
 void GPSNMEA::parseGGA(const std::vector<std::string>& nmea)
 {
 	if (!nmea[0].compare("GGA") == 0) return;
-
 	// TODO implement GGA time handling
 	updateTime(nmea[1]);
 
-	// set position
-	setLatitude(
-			lexical_cast<double>(nmea[2])
-					* (nmea[3].compare("S") == 0 ? (-1.) : 1.) / 100.);
-	setLongitude(
-			lexical_cast<double>(nmea[4])
-					* (nmea[5].compare("W") == 0 ? (-1.) : 1.) / 100.);
-	setAltitude(lexical_cast<double>(nmea[9]));
-	if (nmea[10].compare("M") != 0)
-		cerr << "(GGA) Unknown unit for altitude: " << nmea[1] << endl;
-
-	// gps quality
-	unsigned int quality = lexical_cast<unsigned int>(nmea[6]);
-	switch (quality) {
-		case 0:
-			setGpsState(GPS::dataNotValid);
-			break;
-		case 1:
-			setGpsState(GPS::autonomousMode);
-			break;
-		case 2:
-			setGpsState(GPS::differentialGPS);
-			break;
-		default:
-			cerr << "(GGA) Unknown GPS State " << quality << endl;
-			break;
-	}
-
-	// sat count in use (not in view)
 	try {
+		// set position
+		string lat = nmea[2];
+		string lon = nmea[4];
+		trim(lat);
+		trim(lon);
+
+		if (lat.length() > 0) {
+			setLatitude(
+					lexical_cast<double>(lat)
+							* (nmea[3].compare("S") == 0 ? (-1.) : 1.) / 100.);
+		}
+		if (lon.length() > 0) {
+			setLongitude(
+					lexical_cast<double>(lon)
+							* (nmea[5].compare("W") == 0 ? (-1.) : 1.) / 100.);
+		}
+
+		string altitude(nmea[9]);
+		trim(altitude);
+		if (altitude.length() > 0) setAltitude(lexical_cast<double>(altitude));
+		if (nmea[10].compare("M") != 0)
+			cerr << "(GGA) Unknown unit for altitude: " << nmea[1] << endl;
+
+		// gps quality
+		unsigned int quality = lexical_cast<unsigned int>(nmea[6]);
+		switch (quality) {
+			case 0:
+				setGpsState(GPS::dataNotValid);
+				break;
+			case 1:
+				setGpsState(GPS::autonomousMode);
+				break;
+			case 2:
+				setGpsState(GPS::differentialGPS);
+				break;
+			default:
+				cerr << "(GGA) Unknown GPS State " << quality << endl;
+				break;
+		}
+
+		// sat count in use (not in view)
 		setSatCount(lexical_cast<unsigned short>(nmea[7]));
 	}
 	catch (const bad_lexical_cast& e) {
-		cerr << "Error while parsing field 7 " << e.what() << endl;
+		cerr << "GPSNMEA::parseRMC(): bad_lexical_cast: " << e.what() << endl;
+		cerr << "   --> src_type: " << e.source_type().name() << endl;
+		cerr << "   --> dst_type: " << e.target_type().name() << endl;
+		cerr << "   --> possible values: " << nmea[3] << " / " << nmea[5] << " / " << nmea[7] << " / " << nmea[8] << endl;
 	}
 }
 
@@ -182,13 +198,29 @@ void GPSNMEA::parseGLL(const std::vector<std::string>& nmea)
 {
 	if (!nmea[0].compare("GLL") == 0) return;
 
-	// set position
-	setLatitude(
-			lexical_cast<double>(nmea[1])
-					* (nmea[2].compare("S") == 0 ? (-1.) : 1.) / 100.);
-	setLongitude(
-			lexical_cast<double>(nmea[3])
-					* (nmea[4].compare("W") == 0 ? (-1.) : 1.) / 100.);
+	try {
+		// set position
+		string lat = nmea[1];
+		string lon = nmea[3];
+		trim(lat);
+		trim(lon);
+		if (lat.length() > 0) {
+			setLatitude(
+					lexical_cast<double>(lat)
+						* (nmea[2].compare("S") == 0 ? (-1.) : 1.) / 100.);
+		}
+		if (lon.length() > 0) {
+			setLongitude(
+					lexical_cast<double>(lon)
+							* (nmea[4].compare("W") == 0 ? (-1.) : 1.) / 100.);
+		}
+	}
+	catch (const bad_lexical_cast& e) {
+		cerr << "GPSNMEA::parseRMC(): bad_lexical_cast: " << e.what() << endl;
+		cerr << "   --> src_type: " << e.source_type().name() << endl;
+		cerr << "   --> dst_type: " << e.target_type().name() << endl;
+		cerr << "   --> possible values: " << nmea[3] << " / " << nmea[5] << " / " << nmea[7] << " / " << nmea[8] << endl;
+	}
 
 	// check if it is a GLL packet with extra fields
 	if (nmea.size() > 5) {
@@ -217,16 +249,37 @@ void GPSNMEA::parseRMC(const std::vector<std::string>& nmea)
 	updateTime(nmea[1]);
 	updateDate(nmea[9]);
 
-	// set position
-	setLatitude(
-			lexical_cast<double>(nmea[3])
-					* (nmea[4].compare("S") == 0 ? (-1.) : 1.) / 100.);
-	setLongitude(
-			lexical_cast<double>(nmea[5])
-					* (nmea[6].compare("W") == 0 ? (-1.) : 1.) / 100.);
+	try {
+		// set position
+		string lat = nmea[3];
+		string lon = nmea[5];
+		trim(lat);
+		trim(lon);
+		if (lat.length() > 0) {
+			setLatitude(
+					lexical_cast<double>(lat)
+							* (nmea[4].compare("S") == 0 ? (-1.) : 1.) / 100.);
+		}
+		if (lon.length() > 0) {
+			setLongitude(
+					lexical_cast<double>(nmea[5])
+							* (nmea[6].compare("W") == 0 ? (-1.) : 1.) / 100.);
+		}
 
-	setGroundSpeed(lexical_cast<double>(nmea[7]) * .51444);
-	setCourse(lexical_cast<double>(nmea[8]));
+		string speed = nmea[7];
+		string course = nmea[8];
+		trim(speed);
+		trim(course);
+
+		if (speed.length() > 0) setGroundSpeed(lexical_cast<double>(nmea[7]) * .51444);
+		if (course.length() > 0) setCourse(lexical_cast<double>(nmea[8]));
+	}
+	catch (const bad_lexical_cast& e) {
+		cerr << "GPSNMEA::parseRMC(): bad_lexical_cast: " << e.what() << endl;
+		cerr << "   --> src_type: " << e.source_type().name() << endl;
+		cerr << "   --> dst_type: " << e.target_type().name() << endl;
+		cerr << "   --> possible values: " << nmea[3] << " / " << nmea[5] << " / " << nmea[7] << " / " << nmea[8] << endl;
+	}
 
 	if (nmea[2].compare("V") == 0) {
 		// current gps data is invalid
@@ -245,20 +298,30 @@ void GPSNMEA::parseRMC(const std::vector<std::string>& nmea)
 
 void GPSNMEA::updateTime(const std::string& s)
 {
-	tm orig(getTime());
-	orig.tm_hour = lexical_cast<int>(s.substr(0, 2));
-	orig.tm_min = lexical_cast<int>(s.substr(2, 2));
-	orig.tm_sec = lexical_cast<int>(s.substr(4, 2));
-	setTime(orig);
+	if (s.length() < 6) {
+		cerr << "GPSNMEA::updateTime(): Invalid time format: " << s << endl;
+	}
+	else {
+		tm orig(getTime());
+		orig.tm_hour = lexical_cast<int>(s.substr(0, 2));
+		orig.tm_min = lexical_cast<int>(s.substr(2, 2));
+		orig.tm_sec = lexical_cast<int>(s.substr(4, 2));
+		setTime(orig);
+	}
 }
 
 void GPSNMEA::updateDate(const std::string& s)
 {
-	tm orig(getTime());
-	orig.tm_mday = lexical_cast<int>(s.substr(0, 2));
-	orig.tm_mon = lexical_cast<int>(s.substr(2, 2)) - 1;
-	orig.tm_year = lexical_cast<int>(s.substr(4, 2));
-	if (orig.tm_year < 80)
-		orig.tm_year += 100;
-	setTime(orig);
+	if (s.length() < 6) {
+		cerr << "GPSNMEA::updateDate(): Invalid date format: " << s << endl;
+	}
+	else {
+		tm orig(getTime());
+		orig.tm_mday = lexical_cast<int>(s.substr(0, 2));
+		orig.tm_mon = lexical_cast<int>(s.substr(2, 2)) - 1;
+		orig.tm_year = lexical_cast<int>(s.substr(4, 2));
+		if (orig.tm_year < 80)
+			orig.tm_year += 100;
+		setTime(orig);
+	}
 }
