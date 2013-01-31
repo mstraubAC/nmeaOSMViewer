@@ -21,12 +21,13 @@ class OSMMap: public QWebView
 			mcBlue = 0, mcGold = 1, mcGreen = 2, mcRed = 3
 		};
 		OSMMap(QWidget* parent = 0);
-		OSMMap(const QUrl& url);
+		OSMMap(const QUrl& url, QWidget* parent = 0);
 		virtual ~OSMMap();
 
 		int addMapMarker(double lat, double lon, double course, const std::string& label = "", const std::string& html = "", double size = 5., MarkerColor = mcGreen);
-		bool updateMapMarker(unsigned int id, double lat, double lon, double course, const std::string& label = "", const std::string& html = "", double size = 5., MarkerColor = mcGreen);
-		bool delMapMarker(unsigned int id);
+		bool updateMapMarker(int id, double lat, double lon, double course, const std::string& label = "", const std::string& html = "", double size = 5., MarkerColor = mcGreen);
+		bool delMapMarker(int id);
+		bool existsMapMarker(int id);
 		bool isMapLoaded() const { return (fProgress == 100); }
 
 	private:
@@ -37,6 +38,7 @@ class OSMMap: public QWebView
 
 		OSMMap();
 		void init(const QUrl& url = QUrl("https://www.straub-nv.de/osmMap/"));
+//		void init(const QUrl& url);
 		int getNextFreeId();
 
 	protected slots:
