@@ -2,34 +2,22 @@
 
 class QWebView;
 class QLineEdit;
+class OSMMap;
 
-class BrowserWindow : public QMainWindow {
+class BrowserWindow: public QMainWindow
+{
 	Q_OBJECT
 
 	public:
 		BrowserWindow(const QUrl& url);
-	
+		void restartUdpListener(unsigned short udpPort);
+
 	private:
-		QString fQuery;
-		QWebView* fView;
-//		QLineEdit* fLocationEdit;
-//		QAction* fRotateAction;
-		int fProgress;
+		OSMMap* fView;
+		int fPort;
 
 	protected slots:
-//		void adjustLocation();
-//		void changeLocation();
-		void adjustTitle();
+		void finishedLoading(bool);
 		void setProgress(int p);
-		void finishLoading(bool);
-		
-//		void viewSource();
-//		void slotSourceDownloaded();
-
-//		void hightlightAllLinks();
-//		void rotateImages(bool invert);
-//		void removeGifImages();
-//		void removeInlineFrames();
-//		void removeObjectElements();
-//		void removeEmbeddedElements();
+		void configure();
 };

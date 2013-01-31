@@ -1,82 +1,80 @@
 #include <QtGui>
 #include <QtWebKit>
+#include <iostream>
+#include <sstream>
+#include "OSMMap.h"
 #include "browserwindow.h"
+#include "Settings.h"
+#include "gpsNMEA.h"
 
-BrowserWindow::BrowserWindow(const QUrl& url) {
-	fProgress = 0;
+using namespace std;
 
-	QNetworkProxyFactory::setUseSystemConfiguration(true);
-
-	fView = new QWebView(this);
-	fView->load(url);
-	connect(fView, SIGNAL(loadFinished(bool)), SLOT(adjustLocation()));
-	connect(fView, SIGNAL(titleChanged(QString)), SLOT(adjustTitle()));
-	connect(fView, SIGNAL(loadProgress(int)), SLOT(setProgress(int)));
+BrowserWindow::BrowserWindow(const QUrl& url)
+{
+	// define OSM map display widget
+	fView = new OSMMap(this);
 	connect(fView, SIGNAL(loadFinished(bool)), SLOT(finishedLoading(bool)));
+	connect(fView, SIGNAL(loadProgress(int)), SLOT(setProgress(int)));
 
-//	fLocationEdit = new QLineEdit(this);
-//	fLocationEdit->setSizePolicy(QSizePolicy::Expanding, fLocationEdit->sizePolicy().verticalPolicy());
-//	connect(fLocationEdit, SIGNAL(returnPressed()), SLOT(changeLocation()));
+	// define quit routine
+	QPixmap quitPix("application-exit.png");
+	QAction* quit = new QAction(quitPix, "Beenden", this);
+	quit->setShortcut(tr("CTRL+Q"));
+	connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()) );
 
-//	QToolBar* toolBar = addToolBar(tr("Navigation"));
-//	toolBar->addAction(fView->pageAction(QWebPage::Back));
-//	toolBar->addAction(fView->pageAction(QWebPage::Forward));
-//	toolBar->addAction(fView->pageAction(QWebPage::Reload));
-//	toolBar->addAction(fView->pageAction(QWebPage::Stop));
-//	toolBar->addWidget(fLocationEdit);
+	// define settings routine
+	QPixmap changeSettingsPix("preferences-other.png");
+	QAction* changeSettings = new QAction(changeSettingsPix, "Einstellungen", this);
+	changeSettings->setShortcut(tr("CTRL+S"));
+	connect(changeSettings, SIGNAL(triggered()), SLOT(configure()));
 
-//	QMenu* viewMenu = menuBar()->addMenu(tr("&View"));
-//	QAction* viewSourceAction = new QAction("Page Source", this);
-//	connect(viewSourceAction, SIGNAL(triggered()), SLOT(viewSource()));
-//	viewMenu->addAction(viewSourceAction);
+	QToolBar* toolBar = addToolBar(tr("main toolbar"));
+	toolBar->addAction(quit);
+	toolBar->addAction(changeSettings);
 
-	//.... missing fancy stuff from example
-	
+	QMenu* file = menuBar()->addMenu("Datei");
+	file->addAction(changeSettings);
+	file->addSeparator();
+	file->addAction(quit);
+
 	setCentralWidget(fView);
 	setUnifiedTitleAndToolBarOnMac(true);
+
+	statusBar()->showMessage("Waiting for NMEA datagrams");
 }
 
-//void BrowserWindow::viewSource() {
-//	QNetworkAccessManager* accessManager = fView->page()->networkAccessManager();
-//	QNetworkRequest request(fView->url());
-//	QNetworkReply* reply = accessManager->get(request);
-//	connect(reply, SIGNAL(finished()), this, SLOT(slotSourceDownloaded()));
-//}
-//
-//void BrowserWindow::slotSourceDownloaded() {
-//	QNetworkReply* reply = qobject_cast<QNetworkReply*>(const_cast<QObject*>(sender()));
-//	QTextEdit* textEdit = new QTextEdit(NULL);
-//	textEdit->setAttribute(Qt::WA_DeleteOnClose);
-//	textEdit->show();
-//	textEdit->setPlainText(reply->readAll());
-//	reply->deleteLater();
-//}
+void BrowserWindow::configure()
+{
+	Settings* s = new Settings(this);
+	s->setAttribute(Qt::WA_DeleteOnClose);
+	s->show();
+}
 
-//void BrowserWindow::adjustLocation() {
-//	fLocationEdit->setText(fView->url().toString());
-//}
+void BrowserWindow::finishedLoading(bool)
+{
+	cout << "Browser finished loading." << endl;
 
-//void BrowserWindow::changeLocation() {
-//	QUrl url(fLocationEdit->text());
-//	fView->load(url);
-//	fView->setFocus();
-//}
+	string fNMEA = "$GPRMC,174455,A,5124.631,N,00642.235,E,000.0,360.0,090301,000.6,W*68";
+	GPSNMEA gps;
+	bool nmeaOk = gps.isNmeaMsg(fNMEA);
+	gps.parseNmeaMsg(fNMEA);
+	cout << gps << endl;
 
-void BrowserWindow::adjustTitle() {
-	if (fProgress <= 0 || fProgress >= 100) {
-		setWindowTitle(fView->title());
-	}
-	else {
-		setWindowTitle(QString("%1 (%2%)").arg(fView->title()).arg(fProgress));
-	}
+	fView->addMapMarker(gps.getLatitude(), gps.getLongitude(), gps.getCourse(), "test");
+
+
+//	fView->page()->mainFrame()->evaluateJavaScript(jQuer);
+}
+
+void BrowserWindow::restartUdpListener(unsigned short udpPort) {
+	cout << "BrowserWindow::restartUdpListener" << endl;
 }
 
 void BrowserWindow::setProgress(int p) {
-	fProgress = p;
-	adjustTitle();
-}
-
-void BrowserWindow::finishLoading(bool) {
-	setProgress(100);
-//	fView->page()->mainFrame()->evaluateJavaScript(jQuer);
+	if (p <= 0 || p >= 100) {
+		setWindowTitle("OSM Visualisierer - Loaded");
+	}
+	else {
+		setWindowTitle(QString("OSM Visualisierer laedt - %1%").arg(p));
+	}
 }
