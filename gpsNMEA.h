@@ -61,7 +61,7 @@ class GPSNMEA: public GPS
 		// GPS Satellites in view
 //		void parseGSV(const std::vector<std::string>& nmeaDgm);
 		// Recommended minimum specific GPS/Transit data
-		void praseRMC(const std::vector<std::string>& nmeaDgm);
+		void parseRMC(const std::vector<std::string>& nmeaDgm);
 };
 
 #endif /* GPSNMEA_H_ */

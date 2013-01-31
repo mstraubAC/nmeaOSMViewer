@@ -83,26 +83,26 @@ bool GPSNMEA::parseNmeaMsg(const std::string& nmeaDgm)
 	// extract type
 	vector<string> fields = Tools::split(dgm, ',');
 
-	cout << "Original NMEA:      " << nmeaDgm << endl;
-	cout << "Expanding NMEA dgm: " << dgm << endl;
-	unsigned int i = 0;
-	for (vector<string>::const_iterator it = fields.begin(); it != fields.end();
-			++it) {
-		cout << "  [" << i << "]: " << *it << endl;
-		++i;
-	}
+//	cout << "Original NMEA:      " << nmeaDgm << endl;
+//	cout << "Expanding NMEA dgm: " << dgm << endl;
+//	unsigned int i = 0;
+//	for (vector<string>::const_iterator it = fields.begin(); it != fields.end();
+//			++it) {
+//		cout << "  [" << i << "]: " << *it << endl;
+//		++i;
+//	}
 
 	if (fields[0].compare("GGA") == 0) {
 		parseGGA(fields);
 	}
 	else if (fields[0].compare("RMC") == 0) {
-		praseRMC(fields);
+		parseRMC(fields);
 	}
 	else if (fields[0].compare("GLL") == 0) {
 		parseGLL(fields);
 	}
 	else {
-		cerr << "Unknown NMEA GPS datagram of type: " << fields[0] << endl;
+//		cerr << "GPSNMEA::parseNmeaMsg(): Unknown NMEA GPS datagram of type: " << fields[0] << endl;
 	}
 
 	return true;
@@ -183,7 +183,7 @@ void GPSNMEA::parseGLL(const std::vector<std::string>& nmea)
 	}
 }
 
-void GPSNMEA::praseRMC(const std::vector<std::string>& nmea)
+void GPSNMEA::parseRMC(const std::vector<std::string>& nmea)
 {
 	if (!nmea[0].compare("RMC") == 0) return;
 	cout << "Parsing RMC" << endl;
