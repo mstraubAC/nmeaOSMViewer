@@ -182,5 +182,5 @@ bool OSMMap::delMapMarker(int id)
 
 bool OSMMap::existsMapMarker(int id)
 {
-	return !(id < 0 || id >= fIds.size() || !fIds[id]);
+	return !(id < 0 || size_t(id) >= fIds.size() || !fIds[id]);
 }
