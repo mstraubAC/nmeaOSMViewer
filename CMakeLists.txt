@@ -25,7 +25,7 @@ SET(nmeaOSMviewer_HEADERS browserwindow.h gps.h gpsNMEA.h Tools.h Settings.h)
 ## -g Debugging
 ## -Wall all warnings
 ## -std=c++0x
-set(CMAKE_CXX_FLAGS "-g -Wall -std=c++0x")
+set(CMAKE_CXX_FLAGS "-g -Wall -std=c++0x -fvisibility=hidden")
 
 QT4_WRAP_CPP(nmeaOSMviewer_HEADERS_MOC ${nmeaOSMviewer_HEADERS})
 QT4_WRAP_CPP(osmViewer_HEADERS_MOC ${osmViewer_HEADERS})

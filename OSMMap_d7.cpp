@@ -8,11 +8,12 @@
 #include <string>
 
 #include "OSMMap.h"
+#include "macros.h"
 
 typedef OSMMap* OSMMapHandle;
 extern "C"
 {
-	OSMMapHandle NewOSMMap() { return new OSMMap(0); }
+	OSMMapHandle NewOSMMap(void) { return new OSMMap(0); }
 	void DeleteOSMMap(OSMMapHandle h) { delete h; }
 	
 	//int addMapMarker(double lat, double lon, double course, const std::string& label = "", const std::string& html = "", double size = 5., MarkerColor = mcGreen);
