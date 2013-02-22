@@ -16,7 +16,7 @@ FIND_PACKAGE(Qt4 REQUIRED)
 SET(QT_USE_QTWEBKIT TRUE)
 SET(QT_USE_QTNETWORK TRUE)
 
-SET(osmViewer_SOURCES OSMMap.cpp)
+SET(osmViewer_SOURCES OSMMap.cpp OSMMap_d7.cpp)
 SET(osmViewer_HEADERS OSMMap.h)
 
 SET(nmeaOSMviewer_SOURCES main.cpp browserwindow.cpp gps.cpp gpsNMEA.cpp Tools.cpp Settings.cpp) 
