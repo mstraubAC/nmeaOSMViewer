@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QSettings>
 #include <map>
 #include <string>
 #include "gpsNMEA.h"
@@ -22,6 +23,7 @@ class BrowserWindow: public QMainWindow
 		GPSNMEA fGps;
 		OSMMap* fView;
 		QUdpSocket* fUDPSocket;
+		QSettings fSettings;
 		QueueType fUDPQueues;
 		int fPort;
 		int fId;

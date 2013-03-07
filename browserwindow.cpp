@@ -1,5 +1,6 @@
 #include <QtGui>
 #include <QUdpSocket>
+#include <QSettings>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -17,6 +18,9 @@ BrowserWindow::BrowserWindow() : fUDPSocket(0)
 {
 	// load resource file containing icons and html page
 	QResource::registerResource("resources.rcc");
+
+	// load settings
+	fPort = fSettings.value("udpPort", 10000).toInt();
 
 	// define OSM map display widget
 	fView = new OSMMap(QUrl("qrc:///html/index.html" ), this);
@@ -59,12 +63,12 @@ void BrowserWindow::configure()
 
 void BrowserWindow::finishedLoading(bool)
 {
-	cout << "Browser finished loading." << endl;
-	restartUdpListener(20000);
+	restartUdpListener(fPort);
 }
 
 void BrowserWindow::restartUdpListener(unsigned short udpPort) {
-	cout << "BrowserWindow::restartUdpListener" << endl;
+	fPort = udpPort;
+	fSettings.setValue("udpPort", udpPort);
 
 	if (fUDPSocket)
 		delete fUDPSocket;
