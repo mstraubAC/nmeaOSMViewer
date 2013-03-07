@@ -12,7 +12,7 @@
 #include <vector>
 #include "macros.h"
 
-DLL_LOCAL class OSMMap: public QWebView
+class DLL_LOCAL OSMMap: public QWebView
 {
 	Q_OBJECT
 
