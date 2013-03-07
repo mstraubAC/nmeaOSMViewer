@@ -32,7 +32,9 @@ void Settings::InitWidget() {
 
 	// input field for the udp listener port number
 	QLabel* lUdpPortnumber = new QLabel("UDP Portnummer: ", this);
-	QSpinBox* sbUdpPortnumber = new QSpinBox(this);
+	fSbUdpPortnumber = new QSpinBox(this);
+	fSbUdpPortnumber->setMinimum(1025);
+	fSbUdpPortnumber->setMaximum(65535);
 
 	// define cancel and ok/apply button
 	QPixmap pmCancel(":/icons/dialog-cancel.png");
@@ -52,7 +54,7 @@ void Settings::InitWidget() {
 	// choose grid layout manger and add all out widgets
 	QGridLayout* grid = new QGridLayout();
 	grid->addWidget(lUdpPortnumber, 0, 0);
-	grid->addWidget(sbUdpPortnumber, 0, 1);
+	grid->addWidget(fSbUdpPortnumber, 0, 1);
 	grid->addWidget(btnCancel, 1, 0);
 	grid->addWidget(btnOk, 1, 1);
 
@@ -68,7 +70,7 @@ void Settings::OnOkPressed()
 {
 	try {
 		BrowserWindow* browser = dynamic_cast<BrowserWindow*>(fParent);
-		browser->restartUdpListener(900);
+		browser->restartUdpListener(fSbUdpPortnumber->value());
 	}
 	catch (const std::bad_cast& e) {
 		cerr << "Settings::OnPressed: " << e.what()<< endl;

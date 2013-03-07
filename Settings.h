@@ -9,6 +9,7 @@
 #define SETTINGS_H_
 
 #include <qwidget.h>
+class QSpinBox;
 
 class Settings: public QWidget
 {
@@ -26,6 +27,7 @@ class Settings: public QWidget
 	private:
 		void InitWidget();
 		QWidget* fParent;
+		QSpinBox* fSbUdpPortnumber;
 
 };
 
