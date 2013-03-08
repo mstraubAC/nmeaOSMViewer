@@ -102,19 +102,19 @@ void BrowserWindow::parseUDPQueues()
 	try {
 		for (QueueType::iterator itHost = fUDPQueues.begin(); itHost != fUDPQueues.end(); ++itHost) {
 			unsigned int i = 0;
-			cout << "Processing queue of " << itHost->first.first << ":" << itHost->first.second << endl;
+//			cout << "Processing queue of " << itHost->first.first << ":" << itHost->first.second << endl;
 			unsigned int start, len = 0;
 			bool isOk = fGps.isNmeaMsg(itHost->second, &start, &len);
 			while (isOk || len > 0) {
 				string dgm = itHost->second.substr(start, len);
 				if (!isOk && len > 0) {
 					// bad dgm
-					cerr << i << "(" << start << ", " << len << ") is BAD: " << dgm << endl;
+//					cerr << i << "(" << start << ", " << len << ") is BAD: " << dgm << endl;
 				}
 				else {
 					// dgm ist ok
 					trim(dgm);
-					cout << i << "(" << start << ", " << len << "): " << dgm << endl;
+//					cout << i << "(" << start << ", " << len << "): " << dgm << endl;
 					if (fGps.parseNmeaMsg(dgm)) {
 						// it is s datagram which updated our position info
 						stringstream ss;
@@ -127,7 +127,7 @@ void BrowserWindow::parseUDPQueues()
 							<< "V=" << setprecision(4) << fGps.getGroundSpeed() << "m/s / "
 							<< "S=" << fGps.getSatCount();
 						if (fView->existsMapMarker(fId)) {
-							cout << "Update" << endl;
+//							cout << "Update" << endl;
 							fView->updateMapMarker(fId, fGps.getLatitude(), fGps.getLongitude(), fGps.getCourse(), st.str(), ss.str());
 						}
 						else {
@@ -141,11 +141,11 @@ void BrowserWindow::parseUDPQueues()
 					itHost->second = itHost->second.substr(start+len, string::npos);
 				}
 				catch (const exception& e){
-					cerr << "ERROR: itHost->second = itHost->second.substr(start+len, string::npos);" << endl
-					     << "   -> string=" << itHost->second << endl
-					     << "   -> start =" << start << endl
-					     << "   -> len   =" << len << endl
-					     << "   -> length=" << itHost->second.length() << endl;
+//					cerr << "ERROR: itHost->second = itHost->second.substr(start+len, string::npos);" << endl
+//					     << "   -> string=" << itHost->second << endl
+//					     << "   -> start =" << start << endl
+//					     << "   -> len   =" << len << endl
+//					     << "   -> length=" << itHost->second.length() << endl;
 				}
 				i++;
 				start = 0;
@@ -155,7 +155,7 @@ void BrowserWindow::parseUDPQueues()
 		}
 	}
 	catch (const exception& e) {
-		cerr << "Got an exception in BrowserWindo::parseUDPQueues(): " << e.what() << endl;
+//		cerr << "Got an exception in BrowserWindo::parseUDPQueues(): " << e.what() << endl;
 	}
 }
 
