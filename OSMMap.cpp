@@ -30,7 +30,7 @@ OSMMap::OSMMap(QWidget* parent) : QWebView(parent), fParent(parent), fProgress(0
 
 void OSMMap::init(const QUrl& url)
 {
-//	cout << "OSMMap::init(): url=" << url.toString().toStdString() << endl;
+	cout << "OSMMap::init(): url=" << url.toString().toStdString() << endl;
 	fIds.clear();
 	fIds.resize(100, false);
 
@@ -78,11 +78,11 @@ int OSMMap::addMapMarker(double lat, double lon, double course,
 		const std::string& label, const std::string& html, double size, MarkerColor color)
 {
 	if (!isMapLoaded()) {
-//		cerr << "BrowserWindow::addMapMarker: Browser window is not yet loaded!!!" << endl;
+		cerr << "BrowserWindow::addMapMarker: Browser window is not yet loaded!!!" << endl;
 		return 0;
 	}
 	int id = getNextFreeId();
-//	cout << "id: " << id << endl;
+	cout << "id: " << id << endl;
 	if (id < 0) return id;
 
 
@@ -113,9 +113,9 @@ int OSMMap::addMapMarker(double lat, double lon, double course,
 	 */
 	QString jsAddMarkerTpl = tr("createMapMarker(%1, %2, %3, %4, '%5', '%6', '%7', '%8');");
 	QString jsAddMarker = jsAddMarkerTpl.arg(id).arg(lat).arg(lon).arg(course).arg(html.c_str()).arg(label.c_str()).arg(size).arg(scolor.c_str());
-//	cout << "addMapMarker: " << jsAddMarker.toAscii().constData() << endl;
+	cout << "addMapMarker: " << jsAddMarker.toAscii().constData() << endl;
 	QVariant r = page()->mainFrame()->evaluateJavaScript(jsAddMarker);
-//	cout << " --> result: " <<  r.toString().toLocal8Bit().constData() << endl;
+	cout << " --> result: " <<  r.toString().toLocal8Bit().constData() << endl;
 
 	return id;
 }
@@ -124,7 +124,7 @@ bool OSMMap::updateMapMarker(int id, double lat, double lon, double course,
 		const std::string& label, const std::string& html, double size, MarkerColor color)
 {
 	if (!isMapLoaded()) {
-//		cerr << "BrowserWindow::addMapMarker: Browser window is not yet loaded!!!" << endl;
+		cerr << "BrowserWindow::addMapMarker: Browser window is not yet loaded!!!" << endl;
 		return 0;
 	}
 	if (!existsMapMarker(id))
@@ -158,9 +158,9 @@ bool OSMMap::updateMapMarker(int id, double lat, double lon, double course,
 	 */
 	QString jsAddMarkerTpl = tr("updateMapMarker(%1, %2, %3, %4, '%5', '%6', '%7', '%8');");
 	QString jsAddMarker = jsAddMarkerTpl.arg(id).arg(lat).arg(lon).arg(course).arg(html.c_str()).arg(label.c_str()).arg(size).arg(scolor.c_str());
-//	cout << "updateMapMarker: " << jsAddMarker.toAscii().constData() << endl;
+	cout << "updateMapMarker: " << jsAddMarker.toAscii().constData() << endl;
 	QVariant r = page()->mainFrame()->evaluateJavaScript(jsAddMarker);
-//	cout << " --> result: " <<  r.toString().toLocal8Bit().constData() << endl;
+	cout << " --> result: " <<  r.toString().toLocal8Bit().constData() << endl;
 
 	return true;
 }
@@ -172,9 +172,9 @@ bool OSMMap::delMapMarker(int id)
 
 	QString jsAddMarkerTpl = tr("deleteMarker(%1);");
 	QString jsAddMarker = jsAddMarkerTpl.arg(id);
-//	cout << "deleteMarker: " << jsAddMarker.toAscii().constData() << endl;
+	cout << "deleteMarker: " << jsAddMarker.toAscii().constData() << endl;
 	QVariant r = page()->mainFrame()->evaluateJavaScript(jsAddMarker);
-//	cout << " --> result: " <<  r.toString().toLocal8Bit().constData() << endl;
+	cout << " --> result: " <<  r.toString().toLocal8Bit().constData() << endl;
 
 	fIds[id] = false;
 	return true;
