@@ -26,6 +26,10 @@ SET(nmeaOSMviewer_HEADERS browserwindow.h gps.h gpsNMEA.h Tools.h Settings.h)
 ## -Wall all warnings
 ## -std=c++0x
 set(CMAKE_CXX_FLAGS "-g -Wall -std=c++0x -fvisibility=hidden")
+IF (MINGW)
+	MESSAGE(STATUS "Building on Windows with MinGW")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,-subsystem,windows")
+ENDIF(MINGW)
 
 QT4_WRAP_CPP(nmeaOSMviewer_HEADERS_MOC ${nmeaOSMviewer_HEADERS})
 QT4_WRAP_CPP(osmViewer_HEADERS_MOC ${osmViewer_HEADERS})
