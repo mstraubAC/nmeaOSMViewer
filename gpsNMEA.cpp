@@ -236,12 +236,12 @@ void GPSNMEA::parseGLL(const std::vector<std::string>& nmea)
 		if (lat.length() > 0) {
 			setLatitude(
 					convertCoordinate(lat, false)
-						* (nmea[2].compare("S") == 0 ? (-1.) : 1.) / 100.);
+						* (nmea[2].compare("S") == 0 ? (-1.) : 1.));
 		}
 		if (lon.length() > 0) {
 			setLongitude(
 					convertCoordinate(lon, true)
-							* (nmea[4].compare("W") == 0 ? (-1.) : 1.) / 100.);
+							* (nmea[4].compare("W") == 0 ? (-1.) : 1.));
 		}
 	}
 	catch (const bad_lexical_cast& e) {
@@ -287,12 +287,12 @@ void GPSNMEA::parseRMC(const std::vector<std::string>& nmea)
 		if (lat.length() > 0) {
 			setLatitude(
 					convertCoordinate(lat, false)
-							* (nmea[4].compare("S") == 0 ? (-1.) : 1.) / 100.);
+							* (nmea[4].compare("S") == 0 ? (-1.) : 1.));
 		}
 		if (lon.length() > 0) {
 			setLongitude(
 					convertCoordinate(lon, true)
-							* (nmea[6].compare("W") == 0 ? (-1.) : 1.) / 100.);
+							* (nmea[6].compare("W") == 0 ? (-1.) : 1.));
 		}
 
 		string speed = nmea[7];
