@@ -118,14 +118,14 @@ void BrowserWindow::parseUDPQueues()
 					if (fGps.parseNmeaMsg(dgm)) {
 						// it is s datagram which updated our position info
 						stringstream ss;
-						ss  << "Altitude:     " << setprecision(5) << fGps.getAltitude() << "m<br>"
-							<< "Ground speed: " << setprecision(4) << fGps.getGroundSpeed() << "m/s<br>"
-							<< "Sat count:    " << fGps.getSatCount() << "<br>"
-							<< "Precission:   " << setprecision(1) << fGps.getHorizontalPrecision() << "m<br>";
+						ss  << "Altitude:     " << setprecision(5) << fGps.getAltitude() << " m<br>"
+							<< "Ground speed: " << setprecision(4) << fGps.getGroundSpeed() * 3.6 << " km/h<br>";
+//							<< "Sat count:    " << fGps.getSatCount() << "<br>"
+//							<< "Precission:   " << setprecision(1) << fGps.getHorizontalPrecision() << "m<br>";
 						stringstream st;
-						st  << "H=" << setprecision(5) << fGps.getAltitude() << "m / "
-							<< "V=" << setprecision(4) << fGps.getGroundSpeed() << "m/s / "
-							<< "S=" << fGps.getSatCount();
+						st  << "H=" << setprecision(5) << fGps.getAltitude() << " m"
+							<< " / V=" << setprecision(4) << fGps.getGroundSpeed() * 3.6 << " km/h";
+//							<< " / S=" << fGps.getSatCount();
 						if (fView->existsMapMarker(fId)) {
 							cout << "Update" << endl;
 							fView->updateMapMarker(fId, fGps.getLatitude(), fGps.getLongitude(), fGps.getCourse(), st.str(), ss.str());
