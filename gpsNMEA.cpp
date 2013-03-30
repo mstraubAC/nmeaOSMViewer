@@ -136,6 +136,31 @@ bool GPSNMEA::parseNmeaMsg(const std::string& nmeaDgm)
 	return true;
 }
 
+double GPSNMEA::convertCoordinate(const std::string& s, bool lon)
+{
+	// format of s is
+	// degree minutes
+
+	double degree = 0.;
+	size_t degSep = (lon ? 3 : 2);
+	try {
+		cout << " ===== GPSNMEA::convertCoordinate ===== " << endl;
+		cout << "Orig str:             " << s << endl;
+		degree = lexical_cast<double>( s.substr(0, degSep) );
+		cout << "Degree:               " << degree << endl;
+		degree += lexical_cast<double>( s.substr(degSep, string::npos)) / 60.;
+		cout << "Degree incl. minutes: " << degree << endl;
+	}
+	catch (const bad_lexical_cast& e) {
+		cerr << "GPSNMEA::convertCoordinate(): bad_lexical_cast: " << e.what() << endl;
+		cerr << "   --> src_type: " << e.source_type().name() << endl;
+		cerr << "   --> dst_type: " << e.target_type().name() << endl;
+//		cerr << "   --> possible values: " << nmea[3] << " / " << nmea[5] << " / " << nmea[7] << " / " << nmea[8] << endl;
+	}
+
+	return degree;
+}
+
 void GPSNMEA::parseGGA(const std::vector<std::string>& nmea)
 {
 	if (!nmea[0].compare("GGA") == 0) return;
@@ -150,14 +175,18 @@ void GPSNMEA::parseGGA(const std::vector<std::string>& nmea)
 		trim(lon);
 
 		if (lat.length() > 0) {
-			setLatitude(
-					lexical_cast<double>(lat)
-							* (nmea[3].compare("S") == 0 ? (-1.) : 1.) / 100.);
+
+			double latitude =
+					convertCoordinate(lat, false)
+							* (nmea[3].compare("S") == 0 ? (-1.) : 1.);
+
+			setLatitude(latitude);
 		}
 		if (lon.length() > 0) {
-			setLongitude(
-					lexical_cast<double>(lon)
-							* (nmea[5].compare("W") == 0 ? (-1.) : 1.) / 100.);
+			double longitude =
+					convertCoordinate(lon, true)
+							* (nmea[5].compare("W") == 0 ? (-1.) : 1.);
+			setLongitude(longitude);
 		}
 
 		string altitude(nmea[9]);
@@ -206,12 +235,12 @@ void GPSNMEA::parseGLL(const std::vector<std::string>& nmea)
 		trim(lon);
 		if (lat.length() > 0) {
 			setLatitude(
-					lexical_cast<double>(lat)
+					convertCoordinate(lat, false)
 						* (nmea[2].compare("S") == 0 ? (-1.) : 1.) / 100.);
 		}
 		if (lon.length() > 0) {
 			setLongitude(
-					lexical_cast<double>(lon)
+					convertCoordinate(lon, true)
 							* (nmea[4].compare("W") == 0 ? (-1.) : 1.) / 100.);
 		}
 	}
@@ -257,12 +286,12 @@ void GPSNMEA::parseRMC(const std::vector<std::string>& nmea)
 		trim(lon);
 		if (lat.length() > 0) {
 			setLatitude(
-					lexical_cast<double>(lat)
+					convertCoordinate(lat, false)
 							* (nmea[4].compare("S") == 0 ? (-1.) : 1.) / 100.);
 		}
 		if (lon.length() > 0) {
 			setLongitude(
-					lexical_cast<double>(nmea[5])
+					convertCoordinate(lon, true)
 							* (nmea[6].compare("W") == 0 ? (-1.) : 1.) / 100.);
 		}
 

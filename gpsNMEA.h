@@ -50,6 +50,7 @@ class GPSNMEA: public GPS
 		std::string calcChecksum(const std::string& nmeaDgm) const;
 		void updateTime(const std::string& s);
 		void updateDate(const std::string& s);
+		double convertCoordinate(const std::string& s, bool lon);
 
 		/*
 		 * Parser for different NMEA sentences
