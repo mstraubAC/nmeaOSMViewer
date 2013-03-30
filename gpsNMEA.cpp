@@ -300,8 +300,11 @@ void GPSNMEA::parseRMC(const std::vector<std::string>& nmea)
 		trim(speed);
 		trim(course);
 
-		if (speed.length() > 0) setGroundSpeed(lexical_cast<double>(nmea[7]) * .51444);
-		if (course.length() > 0) setCourse(lexical_cast<double>(nmea[8]));
+		if (speed.length() > 0) setGroundSpeed(lexical_cast<double>(speed) * .51444);
+		if (course.length() > 0) setCourse(lexical_cast<double>(course));
+
+		cout << "parseRMC: speed=" << speed << " --> " << getGroundSpeed() << endl;
+		cout << "parseRMC: course=" << course << " --> " << getCourse() << endl;
 	}
 	catch (const bad_lexical_cast& e) {
 		cerr << "GPSNMEA::parseRMC(): bad_lexical_cast: " << e.what() << endl;
