@@ -112,7 +112,7 @@ int OSMMap::addMapMarker(double lat, double lon, double course,
 	 * 8. marker color
 	 */
 	QString jsAddMarkerTpl = tr("createMapMarker(%1, %2, %3, %4, '%5', '%6', '%7', '%8');");
-	QString jsAddMarker = jsAddMarkerTpl.arg(id).arg(lat).arg(lon).arg(course).arg(html.c_str()).arg(label.c_str()).arg(size).arg(scolor.c_str());
+	QString jsAddMarker = jsAddMarkerTpl.arg(id).arg(lat, 0, 'g', 30).arg(lon, 0, 'g', 30).arg(course).arg(html.c_str()).arg(label.c_str()).arg(size).arg(scolor.c_str());
 	cout << "addMapMarker: " << jsAddMarker.toAscii().constData() << endl;
 	QVariant r = page()->mainFrame()->evaluateJavaScript(jsAddMarker);
 	cout << " --> result: " <<  r.toString().toLocal8Bit().constData() << endl;
@@ -157,7 +157,7 @@ bool OSMMap::updateMapMarker(int id, double lat, double lon, double course,
 	 * 8. marker color
 	 */
 	QString jsAddMarkerTpl = tr("updateMapMarker(%1, %2, %3, %4, '%5', '%6', '%7', '%8');");
-	QString jsAddMarker = jsAddMarkerTpl.arg(id).arg(lat).arg(lon).arg(course).arg(html.c_str()).arg(label.c_str()).arg(size).arg(scolor.c_str());
+	QString jsAddMarker = jsAddMarkerTpl.arg(id).arg(lat, 0, 'g', 10).arg(lon, 0, 'g', 10).arg(course).arg(html.c_str()).arg(label.c_str()).arg(size).arg(scolor.c_str());
 	cout << "updateMapMarker: " << jsAddMarker.toAscii().constData() << endl;
 	QVariant r = page()->mainFrame()->evaluateJavaScript(jsAddMarker);
 	cout << " --> result: " <<  r.toString().toLocal8Bit().constData() << endl;
