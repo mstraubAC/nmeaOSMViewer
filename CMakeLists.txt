@@ -20,7 +20,8 @@ SET(osmViewer_SOURCES OSMMap.cpp OSMMap_d7.cpp)
 SET(osmViewer_HEADERS OSMMap.h)
 
 SET(nmeaOSMviewer_SOURCES main.cpp browserwindow.cpp gps.cpp gpsNMEA.cpp Tools.cpp Settings.cpp) 
-SET(nmeaOSMviewer_HEADERS browserwindow.h gps.h gpsNMEA.h Tools.h Settings.h)
+SET(nmeaOSMviewer_HEADERS browserwindow.h Tools.h Settings.h)
+SET(nmeaOSMviewer_RESOURCES resources.qrc) 
 
 ## -g Debugging
 ## -Wall all warnings
@@ -33,11 +34,12 @@ ENDIF(MINGW)
 
 QT4_WRAP_CPP(nmeaOSMviewer_HEADERS_MOC ${nmeaOSMviewer_HEADERS})
 QT4_WRAP_CPP(osmViewer_HEADERS_MOC ${osmViewer_HEADERS})
+QT4_ADD_RESOURCES(nmeaOSMViewer_RESOURCES_RCC ${nmeaOSMviewer_RESOURCES})
 
 INCLUDE(${QT_USE_FILE})
 ADD_DEFINITIONS(${QT_DEFINITIONS})
 
-ADD_EXECUTABLE(nmeaOSMviewer ${nmeaOSMviewer_SOURCES} ${nmeaOSMviewer_HEADERS_MOC} ${osmViewer_SOURCES} ${osmViewer_HEADERS_MOC})
+ADD_EXECUTABLE(nmeaOSMviewer ${nmeaOSMviewer_SOURCES} ${nmeaOSMviewer_HEADERS_MOC} ${osmViewer_SOURCES} ${osmViewer_HEADERS_MOC} ${nmeaOSMViewer_RESOURCES_RCC})
 TARGET_LINK_LIBRARIES(nmeaOSMviewer ${QT_LIBRARIES})
 
 ## build libraries now
