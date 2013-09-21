@@ -1,0 +1,9 @@
+moc_*
+qrc_*
+*.so
+*.rcc
+*.qrc*
+CMakeCache.txt
+CMakeFiles/*
+Makefile
+nmeaOSMviewer
