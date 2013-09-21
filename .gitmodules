@@ -1,0 +1,3 @@
+[submodule "html/openLayers"]
+	path = html/openLayers
+	url = https://github.com/openlayers/openlayers.git
